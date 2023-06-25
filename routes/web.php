@@ -1,8 +1,9 @@
 <?php
-
-use App\Http\Controllers\ExampleController;
-use App\Http\Controllers\ExampleDataTableControler;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BusController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MainController::class, 'mainPage'])->name('main');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes([
     'login'    => true,
@@ -30,24 +31,47 @@ Auth::routes([
     'verify'   => false,  // for email verification
 ]);
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix' => 'example', 'as' => 'example.'], function () {
-    Route::get('/', [ExampleController::class, 'index'])->name('index');
-    Route::get('/create', [ExampleController::class, 'create'])->name('create');
-    Route::post('store', [ExampleController::class, 'store'])->name('store');
-    Route::get('/{example}/show', [ExampleController::class, 'show'])->name('show');
-    Route::get('/{example}/edit', [ExampleController::class, 'edit'])->name('edit');
-    Route::put('/{example}/update', [ExampleController::class, 'update'])->name('update');
-    Route::delete('/{example}/destroy', [ExampleController::class, 'destroy'])->name('destroy');
+
+Route::group(['prefix' => 'bus', 'as' => 'bus.'], function () {
+    Route::get('/', [BusController::class, 'index'])->name('index');
+    Route::get('/create', [BusController::class, 'create'])->name('create');
+    Route::post('store', [BusController::class, 'store'])->name('store');
+    Route::get('/show', [BusController::class, 'show'])->name('show');
+    Route::get('/edit/{id}', [BusController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [BusController::class, 'update'])->name('update');
+    Route::delete('/{bus}/destroy', [BusController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['prefix' => 'example-data-table', 'as' => 'exampleDataTable.'], function () {
-    Route::get('/', [ExampleDataTableControler::class, 'index'])->name('index');
-    Route::get('/create', [ExampleDataTableControler::class, 'create'])->name('create');
-    Route::post('store', [ExampleDataTableControler::class, 'store'])->name('store');
-    Route::get('/{example}/show', [ExampleDataTableControler::class, 'show'])->name('show');
-    Route::get('/{example}/edit', [ExampleDataTableControler::class, 'edit'])->name('edit');
-    Route::put('/{example}/update', [ExampleDataTableControler::class, 'update'])->name('update');
-    Route::delete('/{example}/destroy', [ExampleDataTableControler::class, 'destroy'])->name('destroy');
+Route::group(['prefix' => 'report', 'as' => 'report.'], function () {
+    Route::get('/', [ReportController::class, 'index'])->name('index');
+    Route::get('/create', [ReportController::class, 'create'])->name('create');
+    Route::post('store', [ReportController::class, 'store'])->name('store');
 });
+
+Route::middleware(['auth', 'isRoleDriver'])->prefix('driver')->as('driver.')->group(function () {
+    Route::controller(DriverController::class)->group(function () {
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+       
+    });
+    });
+
+Route::middleware(['auth', 'isRoleAdmin'])->prefix('admin')->as('admin.')->group(function () {
+        Route::controller(AdminController::class)->group(function () {
+            Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('generatePdf', [AdminController::class, 'generatePdf'])->name('generatePdf');
+            // Route::get('viewPdf', [AdminController::class, 'viewPdf'])->name('viewPdf');
+        });
+    Route::get('/create', [BusController::class, 'create'])->name('create');
+    Route::post('store', [BusController::class, 'store'])->name('store');
+    Route::get('/show', [BusController::class, 'show'])->name('show');
+    Route::get('/edit/{id}', [BusController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [BusController::class, 'update'])->name('update');
+    Route::get('/', [ReportController::class, 'index'])->name('index');
+    Route::get('/', [BusController::class, 'index'])->name('index');
+    Route::delete('/{bus}/destroy', [BusController::class, 'destroy'])->name('destroy');
+        
+    });
