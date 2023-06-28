@@ -139,7 +139,7 @@
           <a href="https://www.protrack365.com/page/share.jsp?mapType=google&token=S1688549520p53I21377938145dc1d263fdde51d38d200dbb98b4">Proton City - KSAS</a>
           <a href="https://www.protrack365.com/page/share.jsp?mapType=google&token=S1688549520p53I21377938145dc1d263fdde51d38d200dbb98b4">Proton City - PT</a>-->
           @foreach ($buses as $bus)
-          <a href = "{{ $bus->link }}">{{ $bus->route }}</a>
+          <a href="{{ route('bus.map', $bus->id)}}">{{ $bus->route }}</a>
         @endforeach
         </div>
       </div>

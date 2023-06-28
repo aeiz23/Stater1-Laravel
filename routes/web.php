@@ -42,6 +42,7 @@ Route::group(['prefix' => 'bus', 'as' => 'bus.'], function () {
     Route::get('/edit/{id}', [BusController::class, 'edit'])->name('edit');
     Route::put('/update/{id}', [BusController::class, 'update'])->name('update');
     Route::delete('/{bus}/destroy', [BusController::class, 'destroy'])->name('destroy');
+    Route::get('/map/{id}',[BusController::class,'map'])->name('map');
 });
 
 Route::group(['prefix' => 'report', 'as' => 'report.'], function () {

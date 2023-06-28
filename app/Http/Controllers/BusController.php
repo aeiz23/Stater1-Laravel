@@ -158,4 +158,9 @@ class BusController extends Controller
         $bus->delete();
         return redirect()->route('bus.index')->with ('success','Bus data is deleted.');
     }
+    public function map($id)
+    {
+        $bus = Bus::findOrFail($id);
+        return view ('bus.map') -> with (['bus' => $bus]);
+    }
 }
