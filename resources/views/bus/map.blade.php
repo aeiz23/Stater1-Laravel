@@ -47,7 +47,7 @@
     }
     
     .header {
-      background-color: #e9b046;
+      background-color: #57eca4;
       color: #080000;
       padding: 20px;
     }
@@ -92,6 +92,25 @@
     .button-container a:hover {
       background-color: #f59dd9;
     }
+    .button-container2 {
+      margin-bottom: 20px;
+      text-align: right;
+    }
+    
+    .button-container2 a {
+      background-color: #f8071b;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 3px;
+      margin-right: 10px;
+      float:left;
+    }
+    
+    .button-container2 a:hover {
+      background-color: #ffd500;
+    }
     .table {
         border-collapse: collapse;
         width: 100%;
@@ -117,9 +136,13 @@
           <h1>Bus Route</h1>
         </div>
         <div class="content">
+            <div class="button-container2">
+                <a href="{{ route('main') }}" >Back</a>
+              </div>
     {{-- <h5 class="text-center mt-5">Status of bus that is Full is not allowed to edit and delete.</h5> --}}
     <table class="table">
-        <thead class="thead-dark">
+      <thead class="thead-dark">
+           
                             <tr>
                                 <th scope="col">Driver Name</th>
                                   <th scope="col">Plate No.</th>
