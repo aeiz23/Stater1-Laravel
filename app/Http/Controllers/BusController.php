@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
-use App\Models\Driver;
+use App\Models\Report;
 use App\Models\User;
 use App\Models\Bus;
 use Illuminate\Support\Facades\Auth;
@@ -152,11 +152,23 @@ class BusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function destroy($bus)
+    // {
+    //     $bus = Bus::find($bus);
+    //     $bus->delete();
+    //     return redirect()->route('bus.index')->with ('success','Bus data is deleted.');
+    // }
     public function destroy($bus)
     {
-        $bus = Bus::find($bus);
-        $bus->delete();
-        return redirect()->route('bus.index')->with ('success','Bus data is deleted.');
+        $hasReports = Report::where('bus_id', $bus)->exists();
+    
+        if ($hasReports) {
+            return redirect()->route('bus.index')->with('message', 'Failed to delete.')->with('type', 'danger')->with('title', 'Error'); 
+        }
+    
+        Bus::destroy($bus);
+        // return redirect()->route('bus.index')->with('success', 'Bus data is deleted.');
+        return redirect()->route('bus.index')->with('success','Bus data is deleted');
     }
     public function map($id)
     {
